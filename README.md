@@ -1,10 +1,6 @@
 
 # HSMS
 
-<img src="http://i.imgur.com/uwWmDv9.png" width="216" height="384" />
-<img src="http://i.imgur.com/p7063VN.png" width="216" height="384" />
-<img src="http://i.imgur.com/Z8Rqb7A.png" width="216" height="384" />
-
 ### DESCRIPTION
 Conversations aren't marked as read when they are opened from a notification.
 
