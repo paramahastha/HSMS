@@ -371,75 +371,12 @@ public abstract class MessageUtils {
 
     public static void hcryptMessage(Context context, MessageItem msgItem, boolean encrypted) {
         CryptoUtils cryptoUtils = new CryptoUtils();
-        msgItem.mBody = cryptoUtils.hcrypt(msgItem.mBody);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Message");
-        dialog.setMessage(msgItem.mBody);
+        dialog.setMessage(cryptoUtils.hcrypt(msgItem.mBody));
         dialog.show();
 
-    }
-
-
-    public static void lockMessage(Context context, MessageItem msgItem, boolean locked) {
-        Uri uri;
-        if ("sms".equals(msgItem.mType)) {
-            uri = Sms.CONTENT_URI;
-        } else {
-            uri = Mms.CONTENT_URI;
-        }
-        final Uri lockUri = ContentUris.withAppendedId(uri, msgItem.mMsgId);
-
-        final ContentValues values = new ContentValues(1);
-        values.put("locked", locked ? 1 : 0);
-
-        new Thread(() -> {
-            context.getContentResolver().update(lockUri,
-                    values, null, null);
-        }, "MainActivity.lockMessage").start();
-    }
-
-    /**
-     * Looks to see if there are any valid parts of the attachment that can be copied to a SD card.
-     *
-     * @param context
-     * @param msgId
-     */
-    public static boolean haveSomethingToCopyToSDCard(Context context, long msgId) {
-        PduBody body = null;
-        try {
-            body = SlideshowModel.getPduBody(context, ContentUris.withAppendedId(Mms.CONTENT_URI, msgId));
-        } catch (MmsException e) {
-            Log.e(TAG, "haveSomethingToCopyToSDCard can't load pdu body: " + msgId);
-        }
-        if (body == null) {
-            return false;
-        }
-
-        boolean result = false;
-        int partNum = body.getPartsNum();
-        for (int i = 0; i < partNum; i++) {
-            PduPart part = body.getPart(i);
-            String type = new String(part.getContentType());
-
-            if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-                Log.v(TAG, "[CMA] haveSomethingToCopyToSDCard: part[" + i + "] contentType=" + type);
-            }
-
-            if (ContentType.isImageType(type) || ContentType.isVideoType(type) ||
-                    ContentType.isAudioType(type) || DrmUtils.isDrmType(type)) {
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
-
-    public static int getDrmMimeMenuStringRsrc(Context context, long msgId) {
-        if (isDrmRingtoneWithRights(context, msgId)) {
-            return R.string.save_ringtone;
-        }
-        return 0;
     }
 
     public static Uri getContactUriForEmail(Context context, String emailAddress) {
@@ -805,47 +742,6 @@ public abstract class MessageUtils {
         }
     }
 
-    public static int getAttachmentType(SlideshowModel model, MultimediaMessagePdu mmp) {
-        if (model == null || mmp == null) {
-            return MessageItem.ATTACHMENT_TYPE_NOT_LOADED;
-        }
-
-        int numberOfSlides = model.size();
-        if (numberOfSlides > 1) {
-            return SmsHelper.SLIDESHOW;
-        } else if (numberOfSlides == 1) {
-            // Only one slide in the slide-show.
-            SlideModel slide = model.get(0);
-            if (slide.hasVideo()) {
-                return SmsHelper.VIDEO;
-            }
-
-            if (slide.hasAudio() && slide.hasImage()) {
-                return SmsHelper.SLIDESHOW;
-            }
-
-            if (slide.hasAudio()) {
-                return SmsHelper.AUDIO;
-            }
-
-            if (slide.hasImage()) {
-                return SmsHelper.IMAGE;
-            }
-
-            if (slide.hasText()) {
-                return SmsHelper.TEXT;
-            }
-
-            // Handle the multimedia message only has subject
-            String subject = mmp.getSubject() != null ? mmp.getSubject().getString() : null;
-            if (!TextUtils.isEmpty(subject)) {
-                return SmsHelper.TEXT;
-            }
-        }
-
-        return MessageItem.ATTACHMENT_TYPE_NOT_LOADED;
-    }
-
     public static void removeThumbnailsFromCache(SlideshowModel slideshow) {
         if (slideshow != null) {
             ThumbnailManager thumbnailManager = QKSMSApp.getApplication().getThumbnailManager();
@@ -908,50 +804,6 @@ public abstract class MessageUtils {
         return DateUtils.formatDateTime(context, when, format_flags);
     }
 
-    public static void selectAudio(Activity activity, int requestCode) {
-        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, false);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_INCLUDE_DRM, false);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE,
-                activity.getString(R.string.select_audio));
-        activity.startActivityForResult(intent, requestCode);
-    }
-
-    public static void recordSound(Activity activity, int requestCode, long sizeLimit) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(ContentType.AUDIO_AMR);
-        intent.setClassName("com.android.soundrecorder",
-                "com.android.soundrecorder.SoundRecorder");
-        intent.putExtra(MediaStore.Audio.Media.EXTRA_MAX_BYTES, sizeLimit);
-        activity.startActivityForResult(intent, requestCode);
-    }
-
-    public static void recordVideo(Activity activity, int requestCode, long sizeLimit) {
-        // The video recorder can sometimes return a file that's larger than the max we
-        // say we can handle. Try to handle that overshoot by specifying an 85% limit.
-        sizeLimit *= .85F;
-
-        int durationLimit = getVideoCaptureDurationLimit(sizeLimit);
-
-        if (Log.isLoggable(LogTag.APP, Log.VERBOSE)) {
-            log("recordVideo: durationLimit: " + durationLimit +
-                    " sizeLimit: " + sizeLimit);
-        }
-
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-        intent.putExtra("android.intent.extra.sizeLimit", sizeLimit);
-        intent.putExtra("android.intent.extra.durationLimit", durationLimit);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, TempFileProvider.SCRAP_CONTENT_URI);
-        activity.startActivityForResult(intent, requestCode);
-    }
-
-    public static void capturePicture(Activity activity, int requestCode) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, TempFileProvider.SCRAP_CONTENT_URI);
-        activity.startActivityForResult(intent, requestCode);
-    }
 
     // Public for until tests
     public static int getVideoCaptureDurationLimit(long bytesAvailable) {
@@ -969,14 +821,6 @@ public abstract class MessageUtils {
             }
         }
         return 0;
-    }
-
-    public static void selectVideo(Context context, int requestCode) {
-        selectMediaByType(context, requestCode, ContentType.VIDEO_UNSPECIFIED, true);
-    }
-
-    public static void selectImage(Context context, int requestCode) {
-        selectMediaByType(context, requestCode, ContentType.IMAGE_UNSPECIFIED, false);
     }
 
     private static void selectMediaByType(

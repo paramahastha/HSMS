@@ -413,6 +413,7 @@ public class ComposeView extends LinearLayout implements View.OnClickListener {
     }
 
     public void sendSms() {
+        // Enkripsi manual buatan kautsar di Class CryptoUtils pada method hcrypt();
         CryptoUtils cryptoUtils = new CryptoUtils();
         String body = mReplyText.getText().toString();
 

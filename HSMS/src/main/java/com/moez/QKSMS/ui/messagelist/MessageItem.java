@@ -168,43 +168,6 @@ public class MessageItem {
 
             mLocked = cursor.getInt(columnsMap.mColumnSmsLocked) != 0;
             mErrorCode = cursor.getInt(columnsMap.mColumnSmsErrorCode);
-        } else if ("mms".equals(type)) {
-            mMessageUri = ContentUris.withAppendedId(Mms.CONTENT_URI, mMsgId);
-            mBoxId = cursor.getInt(columnsMap.mColumnMmsMessageBox);
-            // If we can block, get the address immediately from the "addr" table.
-            if (canBlock) {
-                mAddress = AddressUtils.getFrom(mContext, mMessageUri);
-            }
-            mMessageType = cursor.getInt(columnsMap.mColumnMmsMessageType);
-            mErrorType = cursor.getInt(columnsMap.mColumnMmsErrorType);
-            String subject = cursor.getString(columnsMap.mColumnMmsSubject);
-            if (!TextUtils.isEmpty(subject)) {
-                EncodedStringValue v = new EncodedStringValue(
-                        cursor.getInt(columnsMap.mColumnMmsSubjectCharset),
-                        PduPersister.getBytes(subject));
-                mSubject = SmsHelper.cleanseMmsSubject(context, v.getString());
-            }
-            mLocked = cursor.getInt(columnsMap.mColumnMmsLocked) != 0;
-            mSlideshow = null;
-            mDeliveryStatusString = cursor.getString(columnsMap.mColumnMmsDeliveryReport);
-            mReadReportString = cursor.getString(columnsMap.mColumnMmsReadReport);
-            mBody = null;
-            mMessageSize = 0;
-            mTextContentType = null;
-            // Initialize the time stamp to "" instead of null
-            mTimestamp = "";
-            mMmsStatus = cursor.getInt(columnsMap.mColumnMmsStatus);
-            mAttachmentType = cursor.getInt(columnsMap.mColumnMmsTextOnly) != 0 ?
-                    SmsHelper.TEXT : ATTACHMENT_TYPE_NOT_LOADED;
-
-            // Start an async load of the pdu. If the pdu is already loaded, the callback
-            // will get called immediately
-            boolean loadSlideshow = mMessageType != PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND;
-
-            mItemLoadedFuture = QKSMSApp.getApplication().getPduLoaderManager()
-                    .getPdu(mMessageUri, loadSlideshow,
-                    new PduLoadedMessageItemCallback());
-
         } else {
             throw new MmsException("Unknown type of the message: " + type);
         }
