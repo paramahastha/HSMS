@@ -85,6 +85,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -370,11 +371,13 @@ public abstract class MessageUtils {
 
 
     public static void hcryptMessage(Context context, MessageItem msgItem, boolean encrypted) {
-        CryptoUtils cryptoUtils = new CryptoUtils();
-
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Message");
-        dialog.setMessage(cryptoUtils.hcrypt(msgItem.mBody));
+        try {
+            dialog.setMessage(CryptoUtils.decrypt("password", msgItem.mBody));
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
         dialog.show();
 
     }

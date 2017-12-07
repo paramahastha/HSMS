@@ -67,6 +67,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -414,7 +415,7 @@ public class ComposeView extends LinearLayout implements View.OnClickListener {
 
     public void sendSms() {
         // Enkripsi manual buatan kautsar di Class CryptoUtils pada method hcrypt();
-        CryptoUtils cryptoUtils = new CryptoUtils();
+//        CryptoUtils cryptoUtils = new CryptoUtils();
         String body = mReplyText.getText().toString();
 
         final Drawable attachment;
@@ -448,7 +449,12 @@ public class ComposeView extends LinearLayout implements View.OnClickListener {
 
             Transaction sendTransaction = new Transaction(mContext, SmsHelper.getSendSettings(mContext));
 
-            com.moez.QKSMS.mmssms.Message message = new com.moez.QKSMS.mmssms.Message(cryptoUtils.hcrypt(body), recipients);
+            com.moez.QKSMS.mmssms.Message message = null;
+            try {
+                message = new com.moez.QKSMS.mmssms.Message(CryptoUtils.encrypt("password", body), recipients);
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            }
             message.setType(com.moez.QKSMS.mmssms.Message.TYPE_SMSMMS);
             if (attachment != null) {
                 message.setImage(ImageUtils.drawableToBitmap(attachment));

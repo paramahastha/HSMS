@@ -348,61 +348,14 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
                 dialog.addMenuItem(R.string.menu_edit, MENU_EDIT_MESSAGE);
 
             }
-
-//            dialog.addMenuItem(R.string.copy_message_text, MENU_COPY_MESSAGE_TEXT);
         }
 
         addCallAndContactMenuItems(dialog, messageItem);
-
-        // Forward is not available for undownloaded messages.
-//        if (messageItem.isDownloaded() && (messageItem.isSms() || MessageUtils.isForwardable(mContext, messageItem.getMessageId())) && mIsSmsEnabled) {
-//            dialog.addMenuItem(R.string.menu_forward, MENU_FORWARD_MESSAGE);
-//        }
-//
-//        if (messageItem.isMms()) {
-//            switch (messageItem.mBoxId) {
-//                case Telephony.Mms.MESSAGE_BOX_INBOX:
-//                    break;
-//                case Telephony.Mms.MESSAGE_BOX_OUTBOX:
-//                    // Since we currently break outgoing messages to multiple
-//                    // recipients into one message per recipient, only allow
-//                    // editing a message for single-recipient conversations.
-//                    if (getRecipients().size() == 1) {
-//                        dialog.addMenuItem(R.string.menu_edit, MENU_EDIT_MESSAGE);
-//                    }
-//                    break;
-//            }
-//            switch (messageItem.mAttachmentType) {
-//                case SmsHelper.TEXT:
-//                    break;
-//                case SmsHelper.VIDEO:
-//                case SmsHelper.IMAGE:
-//                    if (MessageUtils.haveSomethingToCopyToSDCard(mContext, messageItem.mMsgId)) {
-//                        dialog.addMenuItem(R.string.copy_to_sdcard, MENU_COPY_TO_SDCARD);
-//                    }
-//                    break;
-//                case SmsHelper.SLIDESHOW:
-//                default:
-//                    dialog.addMenuItem(R.string.view_slideshow, MENU_VIEW_SLIDESHOW);
-//                    if (MessageUtils.haveSomethingToCopyToSDCard(mContext, messageItem.mMsgId)) {
-//                        dialog.addMenuItem(R.string.copy_to_sdcard, MENU_COPY_TO_SDCARD);
-//                    }
-//                    if (MessageUtils.isDrmRingtoneWithRights(mContext, messageItem.mMsgId)) {
-//                        dialog.addMenuItem(MessageUtils.getDrmMimeMenuStringRsrc(mContext, messageItem.mMsgId), MENU_SAVE_RINGTONE);
-//                    }
-//                    break;
-//            }
-//        }
 
         if (messageItem.mEncrypt) {
             dialog.addMenuItem("Decrypt", MENU_DECRYPT);
         }
 
-//        dialog.addMenuItem(R.string.view_message_details, MENU_VIEW_MESSAGE_DETAILS);
-
-//        if (messageItem.mDeliveryStatus != MessageItem.DeliveryStatus.NONE || messageItem.mReadReport) {
-//            dialog.addMenuItem(R.string.view_delivery_report, MENU_DELIVERY_REPORT);
-//        }
 
         if (mIsSmsEnabled) {
             dialog.addMenuItem(R.string.delete_message, MENU_DELETE_MESSAGE);
