@@ -349,15 +349,15 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
 
             }
 
-            dialog.addMenuItem(R.string.copy_message_text, MENU_COPY_MESSAGE_TEXT);
+//            dialog.addMenuItem(R.string.copy_message_text, MENU_COPY_MESSAGE_TEXT);
         }
 
         addCallAndContactMenuItems(dialog, messageItem);
 
         // Forward is not available for undownloaded messages.
-        if (messageItem.isDownloaded() && (messageItem.isSms() || MessageUtils.isForwardable(mContext, messageItem.getMessageId())) && mIsSmsEnabled) {
-            dialog.addMenuItem(R.string.menu_forward, MENU_FORWARD_MESSAGE);
-        }
+//        if (messageItem.isDownloaded() && (messageItem.isSms() || MessageUtils.isForwardable(mContext, messageItem.getMessageId())) && mIsSmsEnabled) {
+//            dialog.addMenuItem(R.string.menu_forward, MENU_FORWARD_MESSAGE);
+//        }
 //
 //        if (messageItem.isMms()) {
 //            switch (messageItem.mBoxId) {
