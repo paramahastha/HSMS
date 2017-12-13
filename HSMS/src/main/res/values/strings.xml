@@ -313,6 +313,7 @@
     <string name="title_settings">Settings</string>
     <string name="title_search">Search</string>
     <string name="title_compose">Compose</string>
+    <string name="title_register">Register</string>
     <string name="title_conversation_list">Conversations</string>
     <string name="title_blocked">Blocked</string>
     <string name="title_changelog">Changelog</string>
@@ -485,7 +486,7 @@
     <!-- In conversation list items, this is the separator between a contact's name and the draft stamp [CHAR LIMIT=5] -->
     <string name="draft_separator">,\u0020</string>
     <!-- In conversation list items, this comes after the receipient's name and contains the number of messages in the thread [CHAR LIMIT=5] -->
-    <string name="message_count_format">\u00a0<xliff:g id="number" example="1">%1$s</xliff:g></string>
+    <string name="message_count_format">\u00a0<xliff:g example="1" id="number">%1$s</xliff:g></string>
 
     <!-- For debugging: Dialog box title indicating there's a situation where data has unexpectedly changed -->
     <string name="error_state">Inconsistent state</string>
@@ -497,7 +498,7 @@
     <string name="select_link_title">Choose action</string>
 
     <!-- In message list items, this string builds the timestamp line when the message is in a group [CHAR LIMIT=NONE] -->
-    <string name="message_timestamp_format"><xliff:g id="string" example="Fred Flinstone">%1$s</xliff:g>\u0020-\u0020<xliff:g id="string" example="9:39AM">%2$s</xliff:g></string>
+    <string name="message_timestamp_format"><xliff:g example="Fred Flinstone" id="string">%1$s</xliff:g>\u0020-\u0020<xliff:g example="9:39AM" id="string">%2$s</xliff:g></string>
 
     <!--Message sending status: sending-->
     <string name="status_sending">Sending…</string>
@@ -539,7 +540,7 @@
         <!-- Case of 1 result. -->
         <item quantity="one">One conversation will be deleted.</item>
         <!-- Case of 0 or 2 or more results. -->
-        <item quantity="other"><xliff:g id="number" example="15">%1$s</xliff:g> conversations will be deleted.</item>
+        <item quantity="other"><xliff:g example="15" id="number">%1$s</xliff:g> conversations will be deleted.</item>
     </plurals>
     <string name="confirm_delete_conversation">The entire thread will be deleted.</string>
     <!-- Delete all threads confirmation dialog message -->
@@ -831,4 +832,19 @@
         <item>1 MB</item>
         <item>Unlimited</item>
     </string-array>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="register">Register</string>
 </resources>

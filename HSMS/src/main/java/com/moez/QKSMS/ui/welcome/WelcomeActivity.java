@@ -1,6 +1,7 @@
 package com.moez.QKSMS.ui.welcome;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.moez.QKSMS.common.LiveViewManager;
 import com.moez.QKSMS.enums.QKPreference;
 import com.moez.QKSMS.ui.ThemeManager;
 import com.moez.QKSMS.ui.base.QKActivity;
+import com.moez.QKSMS.ui.register.RegisterActivity;
 import com.moez.QKSMS.ui.settings.SettingsFragment;
 import com.moez.QKSMS.ui.view.RobotoTextView;
 

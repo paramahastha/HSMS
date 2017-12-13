@@ -1,6 +1,5 @@
 package com.moez.QKSMS.ui;
 
-import android.app.ActivityManager.TaskDescription;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -9,13 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ComponentInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,14 +19,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 import com.google.android.mms.pdu_alt.PduHeaders;
 import com.moez.QKSMS.R;
 import com.moez.QKSMS.common.DonationManager;
 import com.moez.QKSMS.common.LiveViewManager;
 import com.moez.QKSMS.common.QKRateSnack;
 import com.moez.QKSMS.common.google.DraftCache;
+import com.moez.QKSMS.common.google.PrefManager;
 import com.moez.QKSMS.common.utils.MessageUtils;
 import com.moez.QKSMS.data.Conversation;
 import com.moez.QKSMS.enums.QKPreference;
@@ -43,14 +42,18 @@ import com.moez.QKSMS.ui.conversationlist.ConversationListFragment;
 import com.moez.QKSMS.ui.dialog.DefaultSmsHelper;
 import com.moez.QKSMS.ui.dialog.QKDialog;
 import com.moez.QKSMS.ui.dialog.mms.MMSSetupFragment;
+import com.moez.QKSMS.ui.login.LoginActivity;
 import com.moez.QKSMS.ui.messagelist.MessageListActivity;
+import com.moez.QKSMS.ui.register.RegisterActivity;
 import com.moez.QKSMS.ui.search.SearchActivity;
 import com.moez.QKSMS.ui.settings.SettingsFragment;
 import com.moez.QKSMS.ui.welcome.WelcomeActivity;
+
 import org.ligi.snackengage.SnackEngage;
 import org.ligi.snackengage.snacks.BaseSnack;
 
 import java.util.Collection;
+import java.util.logging.Logger;
 
 
 public class MainActivity extends QKActivity {
@@ -66,7 +69,8 @@ public class MainActivity extends QKActivity {
 
     public static final String MMS_SETUP_DONT_ASK_AGAIN = "mmsSetupDontAskAgain";
 
-    @Bind(R.id.root) View mRoot;
+    @Bind(R.id.root)
+    View mRoot;
 
     private ConversationListFragment mConversationList;
 
@@ -211,6 +215,7 @@ public class MainActivity extends QKActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LoginActivity.isLogin = false;
         DonationManager.getInstance(this).destroy();
     }
 
@@ -253,6 +258,13 @@ public class MainActivity extends QKActivity {
         sThreadShowing = 0;
 
         NotificationManager.initQuickCompose(this, false, false);
+
+        Log.d("REGISTER = ", String.valueOf(!(new PrefManager(this).isRegister())));
+        Intent intent = new Intent();
+        if (!(new PrefManager(this).isRegister())) {
+            intent.setClass(this, RegisterActivity.class);
+            startActivity(intent);
+        }
     }
 
     /**
@@ -283,7 +295,7 @@ public class MainActivity extends QKActivity {
             shouldOpenConversation = shouldOpenConversation || scheme.startsWith("sms") || scheme.startsWith("mms");
         }
 
-        if (shouldOpenConversation) {
+        if (shouldOpenConversation && LoginActivity.isLogin) {
             intent.setClass(this, MessageListActivity.class);
             startActivity(intent);
         }
