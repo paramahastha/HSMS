@@ -75,13 +75,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.btn_login:
                 verifyFromSQLite();
-                finish();
                 break;
         }
     }
 
     private void verifyFromSQLite() {
         if (!inputValidation.isInputEditTextFilled(etPasswd, tvPasswd, "Enter Valid Password")) {
+            Toast.makeText(activity, "Password does not filled", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -89,6 +89,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             isLogin = true;
             emptyInputEditText();
+            Toast.makeText(activity, "Password Verified", Toast.LENGTH_SHORT).show();
+            finish();
 
         } else {
             // Snack Bar to show success message that record is wrong

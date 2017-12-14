@@ -76,7 +76,7 @@ public class InputValidation {
             hideKeyboardFrom(textInputEditText2);
             return false;
         } else {
-//            textInputLayout.setError(message + " False ");
+            textInputLayout.setError(message + " False ");
         }
         return true;
     }
