@@ -149,6 +149,12 @@ public class WelcomeActivity extends QKActivity implements ViewPager.OnPageChang
         switch (v.getId()) {
             case R.id.welcome_skip:
                 setResult(RESULT_OK, null);
+
+                if (!mPrefs.getBoolean(SettingsFragment.REGISTER_SEEN, false)) {
+                    Intent registerIntent = new Intent(this, RegisterActivity.class);
+                    startActivity(registerIntent);
+                }
+
                 finish();
                 break;
             case R.id.welcome_previous:

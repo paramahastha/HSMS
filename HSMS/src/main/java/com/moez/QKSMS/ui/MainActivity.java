@@ -67,6 +67,8 @@ public class MainActivity extends QKActivity {
     public static final int HAVE_LOCKED_MESSAGES_TOKEN = 1802;
     private static final int DELETE_OBSOLETE_THREADS_TOKEN = 1803;
 
+    private static boolean isLogin = false;
+
     public static final String MMS_SETUP_DONT_ASK_AGAIN = "mmsSetupDontAskAgain";
 
     @Bind(R.id.root)
@@ -154,9 +156,22 @@ public class MainActivity extends QKActivity {
                 && savedInstanceState.getBoolean(KEY_MMS_SETUP_FRAGMENT_DISMISSED, false);
     }
 
+    private void launchRegisterActivity() {
+        if (mPrefs.getBoolean(SettingsFragment.REGISTER_SEEN, false)) {
+            // User has already seen the welcome screen
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            return;
+        }
+
+        Intent registerIntent = new Intent(this, RegisterActivity.class);
+        startActivityForResult(registerIntent, RegisterActivity.REGISTER_REQUEST_CODE);
+    }
+
     private void launchWelcomeActivity() {
         if (mPrefs.getBoolean(SettingsFragment.WELCOME_SEEN, false)) {
             // User has already seen the welcome screen
+            launchRegisterActivity();
             return;
         }
 
@@ -193,6 +208,7 @@ public class MainActivity extends QKActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == WelcomeActivity.WELCOME_REQUEST_CODE) {
             new DefaultSmsHelper(this, R.string.not_default_first).showIfNotDefault(null);
+            //launchRegisterActivity();
         }
     }
 
@@ -213,9 +229,15 @@ public class MainActivity extends QKActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        isLogin = false;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        LoginActivity.isLogin = false;
+//        LoginActivity.isLogin = false;
         DonationManager.getInstance(this).destroy();
     }
 
@@ -259,12 +281,12 @@ public class MainActivity extends QKActivity {
 
         NotificationManager.initQuickCompose(this, false, false);
 
-        Log.d("REGISTER = ", String.valueOf(!(new PrefManager(this).isRegister())));
-        Intent intent = new Intent();
-        if (!(new PrefManager(this).isRegister())) {
-            intent.setClass(this, RegisterActivity.class);
-            startActivity(intent);
-        }
+//        Log.d("REGISTER = ", String.valueOf(!(new PrefManager(this).isRegister())));
+//        Intent intent = new Intent();
+//        if (!(new PrefManager(this).isRegister())) {
+//            intent.setClass(this, RegisterActivity.class);
+//            startActivity(intent);
+//        }
     }
 
     /**

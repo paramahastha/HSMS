@@ -1,6 +1,8 @@
 package com.moez.QKSMS.ui.register;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import com.moez.QKSMS.helpers.InputValidation;
 import com.moez.QKSMS.model.User;
 import com.moez.QKSMS.sql.DatabaseHelper;
 import com.moez.QKSMS.ui.login.LoginActivity;
+import com.moez.QKSMS.ui.settings.SettingsFragment;
 import com.moez.QKSMS.ui.view.QKEditText;
 import com.moez.QKSMS.ui.view.QKTextView;
 
@@ -101,7 +104,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(activity, "Successfully Registered Password", Toast.LENGTH_SHORT).show();
             emptyInputEditText();
 
-            new PrefManager(this).saveRegisterDetails(true);
+            SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(this).edit();
+            prefs.putBoolean(SettingsFragment.REGISTER_SEEN, true);
+            prefs.apply();
             finish();
 
         }

@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.btn_login:
                 verifyFromSQLite();
+                finish();
                 break;
         }
     }
@@ -86,14 +87,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (databaseHelper.checkUser(etPasswd.getText().toString().trim())) {
 
-            Intent MainIntent = new Intent(activity, MainActivity.class);
+            isLogin = true;
             emptyInputEditText();
-            new PrefManager(this).saveLoginDetail(true);
-            startActivity(MainIntent);
 
         } else {
             // Snack Bar to show success message that record is wrong
-            new PrefManager(this).saveLoginDetail(false);
             Toast.makeText(activity, "Wrong Password", Toast.LENGTH_SHORT).show();
         }
     }
