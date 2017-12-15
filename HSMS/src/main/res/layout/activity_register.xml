@@ -19,7 +19,7 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="Register"
-            android:textColor="@color/text_primary_light"
+            android:textColor="@color/text_primary_dark"
             android:textSize="54sp" />
 
     </LinearLayout>
@@ -32,32 +32,34 @@
         android:orientation="vertical">
 
 
-        <com.moez.QKSMS.ui.view.QKTextView
+        <TextView
             android:id="@+id/tv_passwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Password"
-            android:textColor="@color/text_primary_light" />
+            android:textColor="@color/text_primary_dark" />
 
-        <com.moez.QKSMS.ui.view.QKEditText
+        <EditText
             android:id="@+id/et_passwd"
             android:inputType="textPassword"
             android:layout_width="match_parent"
+            android:textColor="@color/text_primary_dark"
             android:layout_height="wrap_content" />
 
-        <com.moez.QKSMS.ui.view.QKTextView
+        <TextView
             android:id="@+id/tv_confirm_passwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Confirm Password"
-            android:textColor="@color/text_primary_light" />
+            android:textColor="@color/text_primary_dark" />
 
-        <com.moez.QKSMS.ui.view.QKEditText
+        <EditText
             android:id="@+id/et_confirm_passwd"
             android:inputType="textPassword"
             android:layout_width="match_parent"
+            android:textColor="@color/text_primary_dark"
             android:layout_height="wrap_content" />
 
         <Button

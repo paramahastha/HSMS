@@ -66,7 +66,6 @@ public class ConversationListAdapter extends RecyclerCursorAdapter<ConversationL
         holder.mClickListener = mItemClickListener;
         holder.root.setOnClickListener(holder);
         holder.root.setOnLongClickListener(holder);
-
         holder.mutedView.setVisibility(new ConversationPrefsHelper(mContext, conversation.getThreadId())
                 .getNotificationsEnabled() ? View.GONE : View.VISIBLE);
 

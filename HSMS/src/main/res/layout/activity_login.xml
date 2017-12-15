@@ -31,10 +31,11 @@
         android:gravity="center|top"
         android:orientation="vertical">
 
-        <com.moez.QKSMS.ui.view.QKEditText
+        <EditText
             android:id="@+id/et_passwd"
             android:inputType="textPassword"
             android:layout_width="250dp"
+            android:textColor="@color/text_primary_dark"
             android:hint="Password"
             android:layout_height="wrap_content" />
 

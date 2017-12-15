@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.moez.QKSMS.ui.view.QKEditText;
 import com.moez.QKSMS.ui.view.QKTextView;
@@ -30,11 +31,30 @@ public class InputValidation {
      * method to check InputEditText filled .
      *
      * @param textInputEditText
+     * @param message
+     * @return
+     */
+    public boolean isInputEditTextFilled(EditText textInputEditText, String message) {
+        String value = textInputEditText.getText().toString().trim();
+        if (value.isEmpty()) {
+            hideKeyboardFrom(textInputEditText);
+            return false;
+        } else {
+//            textInputLayout.setError(message + " False ");
+        }
+
+        return true;
+    }
+
+    /**
+     * method to check InputEditText filled .
+     *
+     * @param textInputEditText
      * @param textInputLayout
      * @param message
      * @return
      */
-    public boolean isInputEditTextFilled(QKEditText textInputEditText, QKTextView textInputLayout, String message) {
+    public boolean isInputEditTextFilled(EditText textInputEditText, TextView textInputLayout, String message) {
         String value = textInputEditText.getText().toString().trim();
         if (value.isEmpty()) {
             textInputLayout.setError(message);
@@ -68,7 +88,7 @@ public class InputValidation {
         return true;
     }
 
-    public boolean isInputEditTextMatches(EditText textInputEditText1, EditText textInputEditText2, QKTextView textInputLayout, String message) {
+    public boolean isInputEditTextMatches(EditText textInputEditText1, EditText textInputEditText2, TextView textInputLayout, String message) {
         String value1 = textInputEditText1.getText().toString().trim();
         String value2 = textInputEditText2.getText().toString().trim();
         if (!value1.contentEquals(value2)) {

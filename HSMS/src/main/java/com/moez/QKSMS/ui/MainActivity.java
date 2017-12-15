@@ -208,7 +208,6 @@ public class MainActivity extends QKActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == WelcomeActivity.WELCOME_REQUEST_CODE) {
             new DefaultSmsHelper(this, R.string.not_default_first).showIfNotDefault(null);
-            //launchRegisterActivity();
         }
     }
 
@@ -237,7 +236,6 @@ public class MainActivity extends QKActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        LoginActivity.isLogin = false;
         DonationManager.getInstance(this).destroy();
     }
 
@@ -280,13 +278,6 @@ public class MainActivity extends QKActivity {
         sThreadShowing = 0;
 
         NotificationManager.initQuickCompose(this, false, false);
-
-//        Log.d("REGISTER = ", String.valueOf(!(new PrefManager(this).isRegister())));
-//        Intent intent = new Intent();
-//        if (!(new PrefManager(this).isRegister())) {
-//            intent.setClass(this, RegisterActivity.class);
-//            startActivity(intent);
-//        }
     }
 
     /**

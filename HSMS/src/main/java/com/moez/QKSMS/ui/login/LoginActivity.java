@@ -1,21 +1,16 @@
 package com.moez.QKSMS.ui.login;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.moez.QKSMS.R;
-import com.moez.QKSMS.common.google.PrefManager;
 import com.moez.QKSMS.helpers.InputValidation;
 import com.moez.QKSMS.sql.DatabaseHelper;
-import com.moez.QKSMS.ui.MainActivity;
 import com.moez.QKSMS.ui.view.QKEditText;
 import com.moez.QKSMS.ui.view.QKTextView;
 
@@ -27,9 +22,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private final AppCompatActivity activity = LoginActivity.this;
 
-    private QKTextView tvPasswd;
-
-    private QKEditText etPasswd;
+    private EditText etPasswd;
 
     private Button btnLogin;
 
@@ -49,9 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initViews() {
 
-        tvPasswd = (QKTextView) findViewById(R.id.tv_passwd);
-
-        etPasswd = (QKEditText) findViewById(R.id.et_passwd);
+        etPasswd = (EditText) findViewById(R.id.et_passwd);
 
         btnLogin = (Button) findViewById(R.id.btn_login);
 
@@ -80,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void verifyFromSQLite() {
-        if (!inputValidation.isInputEditTextFilled(etPasswd, tvPasswd, "Enter Valid Password")) {
+        if (!inputValidation.isInputEditTextFilled(etPasswd, "Enter Password")) {
             Toast.makeText(activity, "Password does not filled", Toast.LENGTH_SHORT).show();
             return;
         }
