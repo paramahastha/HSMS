@@ -702,7 +702,11 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
                     break;
 
                 case MENU_DECRYPT:
-                    MessageUtils.hcryptMessage(mContext, mMsgItem, true);
+                    try {
+                        MessageUtils.hcryptMessage(mContext, mMsgItem, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
 
             }

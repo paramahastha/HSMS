@@ -451,8 +451,10 @@ public class ComposeView extends LinearLayout implements View.OnClickListener {
 
             com.moez.QKSMS.mmssms.Message message = null;
             try {
-                message = new com.moez.QKSMS.mmssms.Message(CryptoUtils.encrypt("password", body), recipients);
+                message = new com.moez.QKSMS.mmssms.Message(CryptoUtils.encrypt(body), recipients);
             } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             message.setType(com.moez.QKSMS.mmssms.Message.TYPE_SMSMMS);

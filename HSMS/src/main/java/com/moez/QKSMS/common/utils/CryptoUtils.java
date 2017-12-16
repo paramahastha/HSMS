@@ -7,26 +7,16 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public final class CryptoUtils {
 
-//    public String hcrypt(String input) {
-//
-//        char[] key = {'K', 'S' , 'R'};
-//        StringBuilder output = new StringBuilder();
-//
-//        for (int i = 0; i < input.length(); i++) {
-//            output.append((char) (input.charAt(i) ^ key[i % key.length]));
-//        }
-//
-//        return output.toString();
-//    }
-
-    private static final String TAG = "AESCrypt";
+    private static final String TAG = "CryptoUtils";
 
     //AESCrypt-ObjC uses CBC and PKCS7Padding
     private static final String AES_MODE = "AES/CBC/PKCS7Padding";
@@ -40,8 +30,77 @@ public final class CryptoUtils {
 
     //togglable log option (please turn off in live!)
     public static boolean DEBUG_LOG_ENABLED = true;
+    private static char[] XOR_SECRET_KEY = {'T', 'L', 'Q', '1', 'W', 'M', 'K', '9', 'N'};
+    private static String AES_SECRET_KEY_1 = "AESSECRETKEY1";
+    private static String AES_SECRET_KEY_2 = "AESSECRETKEY2";
+    private static String TRIDES_SECRET_KEY_1 = "TRISECRETKEY1";
+    private static String TRIDES_SECRET_KEY_2 = "TRISECRETKEY2";
+
+    public static String encrypt(String strToEncrypt) throws Exception {
+
+        String strAES = encryptAES(AES_SECRET_KEY_1, strToEncrypt);
+        String str3DES = encrypt3DES(TRIDES_SECRET_KEY_1,strAES);
+        String strXOR = XOR(XOR_SECRET_KEY, str3DES);
+        String strAES2 = encryptAES(AES_SECRET_KEY_2, strXOR);
+        String str3DES2 = encrypt3DES(TRIDES_SECRET_KEY_2,strAES2);
+
+        return str3DES2;
+    }
+
+    public static String decrypt(String strToDecrypt) throws Exception {
+        String str3DES2 = decrypt3DES(TRIDES_SECRET_KEY_2,strToDecrypt);
+        String strAES2 = decryptAES(AES_SECRET_KEY_2, str3DES2);
+        String strXOR = XOR(XOR_SECRET_KEY, strAES2);
+        String str3DES = decrypt3DES(TRIDES_SECRET_KEY_1,strXOR);
+        String strAES = decryptAES(AES_SECRET_KEY_1, str3DES);
+
+        return strAES;
+    }
+
+    private static String XOR( char[] skey, String input) {
+        char[] key = skey; //Can be any chars, and any length array
+        StringBuilder output = new StringBuilder();
+
+        for (int i = 0; i < input.length(); i++) {
+            output.append((char) (input.charAt(i) ^ key[i % key.length]));
+        }
+
+        return output.toString();
+    }
 
 
+    private static String encrypt3DES(String secretKey, String message) throws Exception {
+
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        byte[] digestOfPassword = md.digest(secretKey.getBytes("utf-8"));
+        byte[] keyBytes = Arrays.copyOf(digestOfPassword, 24);
+
+        SecretKey key = new SecretKeySpec(keyBytes, "DESede");
+        Cipher cipher = Cipher.getInstance("DESede");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+
+        byte[] plainTextBytes = message.getBytes("utf-8");
+        byte[] buf = cipher.doFinal(plainTextBytes);
+        String encoded = Base64.encodeToString(buf, Base64.NO_WRAP);
+
+        return encoded;
+    }
+
+    private static String decrypt3DES(String secretKey,String encryptedText) throws Exception {
+        byte[] message = Base64.decode(encryptedText.getBytes("utf-8"),Base64.NO_WRAP);
+
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        byte[] digestOfPassword = md.digest(secretKey.getBytes("utf-8"));
+        byte[] keyBytes = Arrays.copyOf(digestOfPassword, 24);
+        SecretKey key = new SecretKeySpec(keyBytes, "DESede");
+
+        Cipher decipher = Cipher.getInstance("DESede");
+        decipher.init(Cipher.DECRYPT_MODE, key);
+
+        byte[] plainText = decipher.doFinal(message);
+
+        return new String(plainText, CHARSET);
+    }
     /**
      * Generates SHA256 hash of the password which is used as key
      *
@@ -70,7 +129,7 @@ public final class CryptoUtils {
      * @return Base64 encoded CipherText
      * @throws GeneralSecurityException if problems occur during encryption
      */
-    public static String encrypt(final String password, String message)
+    private static String encryptAES(final String password, String message)
             throws GeneralSecurityException {
 
         try {
@@ -78,7 +137,7 @@ public final class CryptoUtils {
 
             log("message", message);
 
-            byte[] cipherText = encrypt(key, ivBytes, message.getBytes(CHARSET));
+            byte[] cipherText = encryptAES(key, ivBytes, message.getBytes(CHARSET));
 
             //NO_WRAP is important as was getting \n at the end
             String encoded = Base64.encodeToString(cipherText, Base64.NO_WRAP);
@@ -100,7 +159,7 @@ public final class CryptoUtils {
      * @return Encrypted cipher text (not encoded)
      * @throws GeneralSecurityException if something goes wrong during encryption
      */
-    public static byte[] encrypt(final SecretKeySpec key, final byte[] iv, final byte[] message)
+    private static byte[] encryptAES(final SecretKeySpec key, final byte[] iv, final byte[] message)
             throws GeneralSecurityException {
         final Cipher cipher = Cipher.getInstance(AES_MODE);
         IvParameterSpec ivSpec = new IvParameterSpec(iv);
@@ -121,7 +180,7 @@ public final class CryptoUtils {
      * @return message in Plain text (String UTF-8)
      * @throws GeneralSecurityException if there's an issue decrypting
      */
-    public static String decrypt(final String password, String base64EncodedCipherText)
+    private static String decryptAES(final String password, String base64EncodedCipherText)
             throws GeneralSecurityException {
 
         try {
@@ -131,7 +190,7 @@ public final class CryptoUtils {
             byte[] decodedCipherText = Base64.decode(base64EncodedCipherText, Base64.NO_WRAP);
             log("decodedCipherText", decodedCipherText);
 
-            byte[] decryptedBytes = decrypt(key, ivBytes, decodedCipherText);
+            byte[] decryptedBytes = decryptAES(key, ivBytes, decodedCipherText);
 
             log("decryptedBytes", decryptedBytes);
             String message = new String(decryptedBytes, CHARSET);
@@ -157,7 +216,7 @@ public final class CryptoUtils {
      * @return Decrypted message cipher text (not encoded)
      * @throws GeneralSecurityException if something goes wrong during encryption
      */
-    public static byte[] decrypt(final SecretKeySpec key, final byte[] iv, final byte[] decodedCipherText)
+    private static byte[] decryptAES(final SecretKeySpec key, final byte[] iv, final byte[] decodedCipherText)
             throws GeneralSecurityException {
         final Cipher cipher = Cipher.getInstance(AES_MODE);
         IvParameterSpec ivSpec = new IvParameterSpec(iv);

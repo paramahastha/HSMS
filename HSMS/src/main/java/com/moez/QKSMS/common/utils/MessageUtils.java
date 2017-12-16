@@ -370,11 +370,11 @@ public abstract class MessageUtils {
     }
 
 
-    public static void hcryptMessage(Context context, MessageItem msgItem, boolean encrypted) {
+    public static void hcryptMessage(Context context, MessageItem msgItem, boolean encrypted) throws Exception {
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Message");
         try {
-            dialog.setMessage(CryptoUtils.decrypt("password", msgItem.mBody));
+            dialog.setMessage(CryptoUtils.decrypt(msgItem.mBody));
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
