@@ -110,6 +110,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     public static final String DELETE_OLD_MESSAGES = "pref_key_delete_old_messages";
     public static final String DELETE_UNREAD_MESSAGES = "pref_key_delete_old_unread_messages";
     public static final String DELETE_READ_MESSAGES = "pref_key_delete_old_read_messages";
+    public static final String CHANGE_PASSWORD = "pref_key_change_password";
     public static final String YAPPY = "pref_key_endlessjabber";
     public static final String BLOCKED_ENABLED = "pref_key_blocked_enabled";
     public static final String BLOCKED_SENDERS = "pref_key_blocked_senders";

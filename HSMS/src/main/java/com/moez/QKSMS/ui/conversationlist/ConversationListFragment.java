@@ -3,6 +3,7 @@ package com.moez.QKSMS.ui.conversationlist;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -36,6 +37,7 @@ import com.moez.QKSMS.ui.MainActivity;
 import com.moez.QKSMS.ui.ThemeManager;
 import com.moez.QKSMS.ui.base.QKFragment;
 import com.moez.QKSMS.ui.base.RecyclerCursorAdapter;
+import com.moez.QKSMS.ui.changepassword.ChangePasswordActivity;
 import com.moez.QKSMS.ui.compose.ComposeActivity;
 import com.moez.QKSMS.ui.dialog.conversationdetails.ConversationDetailsDialog;
 import com.moez.QKSMS.ui.messagelist.MessageListActivity;
@@ -223,6 +225,11 @@ public class ConversationListFragment extends QKFragment implements LoaderManage
 
             case R.id.menu_done:
                 mAdapter.disableMultiSelectMode(true);
+                return true;
+
+            case R.id.menu_changepass:
+                Intent intent = new Intent(getActivity(), ChangePasswordActivity.class);
+                startActivity(intent);
                 return true;
         }
 
