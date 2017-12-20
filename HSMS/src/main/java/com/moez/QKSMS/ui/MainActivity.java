@@ -159,8 +159,11 @@ public class MainActivity extends QKActivity {
     private void launchRegisterActivity() {
         if (mPrefs.getBoolean(SettingsFragment.REGISTER_SEEN, false)) {
             // User has already seen the welcome screen
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
+            if (!isLogin) {
+                Log.i("Login: ", String.valueOf(isLogin));
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                startActivity(loginIntent);
+            }
             return;
         }
 

@@ -28,8 +28,7 @@ public class DeleteOldMessagesService extends IntentService {
 
         // Continue if the auto delete setting is enabled, and we haven't done a purge today
         if (QKPreferences.getBoolean(QKPreference.AUTO_DELETE) && (last.getTimeInMillis() == 0 ||
-                current.get(Calendar.MINUTE) != last.get(Calendar.MINUTE) &&
-                current.get(Calendar.SECOND) == last.get(Calendar.SECOND) ||
+                current.get(Calendar.MINUTE) != last.get(Calendar.MINUTE) ||
                 current.get(Calendar.YEAR) != last.get(Calendar.YEAR))) {
             Log.i(TAG, "Ready to delete old messages");
             QKPreferences.setLong(QKPreference.LAST_AUTO_DELETE_CHECK, System.currentTimeMillis());
@@ -88,8 +87,8 @@ public class DeleteOldMessagesService extends IntentService {
 
         Intent intent = new Intent(context, DeleteOldMessagesService.class);
         PendingIntent pIntent = PendingIntent.getService(context, 9237, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+        long interval = 1000 * 60 * 1;
         AlarmManager alarm = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntent);
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, pIntent);
     }
 }
