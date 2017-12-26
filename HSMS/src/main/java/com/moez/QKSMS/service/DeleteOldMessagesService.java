@@ -33,7 +33,7 @@ public class DeleteOldMessagesService extends IntentService {
             Log.i(TAG, "Ready to delete old messages");
             QKPreferences.setLong(QKPreference.LAST_AUTO_DELETE_CHECK, System.currentTimeMillis());
 
-            deleteOldUnreadMessages(this);
+//            deleteOldUnreadMessages(this);
             deleteOldReadMessages(this);
         } else {
             Log.i(TAG, "Not going to delete old messages");
@@ -87,7 +87,7 @@ public class DeleteOldMessagesService extends IntentService {
 
         Intent intent = new Intent(context, DeleteOldMessagesService.class);
         PendingIntent pIntent = PendingIntent.getService(context, 9237, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long interval = 1000 * 60 * 1;
+        long interval = 1000 * 60;
         AlarmManager alarm = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, pIntent);
     }

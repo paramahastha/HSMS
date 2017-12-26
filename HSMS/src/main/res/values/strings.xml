@@ -176,6 +176,8 @@
     <string name="pref_delete_old_messages_unread_summary">Automatically delete unread messages after %s minutes</string>
     <string name="pref_delete_old_messages_read">Read messages</string>
     <string name="pref_delete_old_messages_read_summary">Automatically delete read messages after %s minutes</string>
+    <string name="pref_delete_old_messages_decrypted">Decrypt messages</string>
+    <string name="pref_delete_old_messages_decrypted_summary">Automatically delete decrypted messages after %s minutes</string>
     <string name="pref_yappy">Yappy integration</string>
     <string name="pref_endlessjabber_summary">Enable full support for Yappy</string>
     <string name="pref_blocked_conversations">Blocked conversations</string>
