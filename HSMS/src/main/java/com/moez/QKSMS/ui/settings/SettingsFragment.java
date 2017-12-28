@@ -110,6 +110,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     public static final String DELETE_OLD_MESSAGES = "pref_key_delete_old_messages";
     public static final String DELETE_UNREAD_MESSAGES = "pref_key_delete_old_unread_messages";
     public static final String DELETE_READ_MESSAGES = "pref_key_delete_old_read_messages";
+    public static final String DELETE_DECRYPT_MESSAGES = "pref_key_delete_decrypted_messages";
     public static final String CHANGE_PASSWORD = "pref_key_change_password";
     public static final String YAPPY = "pref_key_endlessjabber";
     public static final String BLOCKED_ENABLED = "pref_key_blocked_enabled";
@@ -290,14 +291,19 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             font_weight.setSummary(mFontWeights[i == 2 ? 0 : 1]);
         }
 
-        EditTextPreference deleteUnread = (EditTextPreference) findPreference(DELETE_UNREAD_MESSAGES);
-        if (deleteUnread != null) {
-            deleteUnread.setSummary(mContext.getString(R.string.pref_delete_old_messages_unread_summary, QKPreferences.getString(QKPreference.AUTO_DELETE_UNREAD)));
-        }
+//        EditTextPreference deleteUnread = (EditTextPreference) findPreference(DELETE_UNREAD_MESSAGES);
+//        if (deleteUnread != null) {
+//            deleteUnread.setSummary(mContext.getString(R.string.pref_delete_old_messages_unread_summary, QKPreferences.getString(QKPreference.AUTO_DELETE_UNREAD)));
+//        }
+//
+//        EditTextPreference deleteRead = (EditTextPreference) findPreference(DELETE_READ_MESSAGES);
+//        if (deleteRead != null) {
+//            deleteRead.setSummary(mContext.getString(R.string.pref_delete_old_messages_read_summary, QKPreferences.getString(QKPreference.AUTO_DELETE_READ)));
+//        }
 
-        EditTextPreference deleteRead = (EditTextPreference) findPreference(DELETE_READ_MESSAGES);
-        if (deleteRead != null) {
-            deleteRead.setSummary(mContext.getString(R.string.pref_delete_old_messages_read_summary, QKPreferences.getString(QKPreference.AUTO_DELETE_READ)));
+        EditTextPreference deleteDecrypt = (EditTextPreference) findPreference(DELETE_DECRYPT_MESSAGES);
+        if (deleteDecrypt != null) {
+            deleteDecrypt.setSummary(mContext.getString(R.string.pref_delete_messages_decrypted_summary, QKPreferences.getString(QKPreference.AUTO_DELETE_DECRYPT)));
         }
 
         Preference day_start = findPreference(DAY_START);
@@ -457,30 +463,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 updateAlarmManager(mContext, true);
                 break;
 
-            case DELETE_OLD_MESSAGES:
-                if ((Boolean) newValue) {
-                    new QKDialog()
-                            .setContext(mContext)
-                            .setTitle(R.string.pref_delete_old_messages)
-                            .setMessage(R.string.dialog_delete_old_messages)
-                            .setPositiveButton(R.string.yes, v -> {
-                                QKPreferences.setBoolean(QKPreference.AUTO_DELETE, true);
-                                ((CheckBoxPreference) preference).setChecked(true);
-                                DeleteOldMessagesService.setupAutoDeleteAlarm(mContext);
-                                mContext.makeToast(R.string.toast_deleting_old_messages);
-                            })
-                            .setNegativeButton(R.string.cancel, null)
-                            .show();
-                    return false;
-                }
-                break;
-
-            case DELETE_UNREAD_MESSAGES:
-                preference.setSummary(mContext.getString(R.string.pref_delete_old_messages_unread_summary, newValue));
-                break;
-
-            case DELETE_READ_MESSAGES:
-                preference.setSummary(mContext.getString(R.string.pref_delete_old_messages_read_summary, newValue));
+            case DELETE_DECRYPT_MESSAGES:
+                preference.setSummary(mContext.getString(R.string.pref_delete_messages_decrypted_summary, newValue));
                 break;
 
             case YAPPY:

@@ -26,15 +26,19 @@ public class DeleteOldMessagesService extends IntentService {
 
         Calendar current = Calendar.getInstance();
 
+        Log.i(TAG, "Curr = " + String.valueOf(current.get(Calendar.MINUTE)) + ":" + String.valueOf(current.get(Calendar.SECOND)) + " Last = "
+        + String.valueOf(last.get(Calendar.MINUTE)+Integer.parseInt(QKPreferences.getString(QKPreference.AUTO_DELETE_READ))) + ":" + String.valueOf(current.get(Calendar.SECOND)));
+
+        Log.i(TAG, "Integer Parse: " + String.valueOf(-Integer.parseInt(QKPreferences.getString(QKPreference.AUTO_DELETE_READ))));
         // Continue if the auto delete setting is enabled, and we haven't done a purge today
         if (QKPreferences.getBoolean(QKPreference.AUTO_DELETE) && (last.getTimeInMillis() == 0 ||
-                current.get(Calendar.MINUTE) != last.get(Calendar.MINUTE) ||
+                current.get(Calendar.MINUTE) == last.get(Calendar.MINUTE) ||
                 current.get(Calendar.YEAR) != last.get(Calendar.YEAR))) {
             Log.i(TAG, "Ready to delete old messages");
             QKPreferences.setLong(QKPreference.LAST_AUTO_DELETE_CHECK, System.currentTimeMillis());
 
 //            deleteOldUnreadMessages(this);
-            deleteOldReadMessages(this);
+//            deleteOldReadMessages(this);
         } else {
             Log.i(TAG, "Not going to delete old messages");
         }
@@ -83,12 +87,12 @@ public class DeleteOldMessagesService extends IntentService {
     public static void setupAutoDeleteAlarm(Context context) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 3); // We want this service to run when the phone is not likely being used
+        calendar.set(Calendar.MINUTE, Integer.parseInt(QKPreferences.getString(QKPreference.AUTO_DELETE_READ))); // We want this service to run when the phone is not likely being used
 
         Intent intent = new Intent(context, DeleteOldMessagesService.class);
         PendingIntent pIntent = PendingIntent.getService(context, 9237, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long interval = 1000 * 60;
+
         AlarmManager alarm = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, pIntent);
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60000 , pIntent);
     }
 }

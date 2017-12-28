@@ -19,6 +19,7 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.provider.Telephony;
 import android.support.annotation.IntegerRes;
@@ -704,6 +705,17 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
                 case MENU_DECRYPT:
                     try {
                         MessageUtils.hcryptMessage(mContext, mMsgItem, true);
+                        new CountDownTimer(60000 * Integer.parseInt(QKPreferences.getString(QKPreference.AUTO_DELETE_DECRYPT)), 1000) {
+                            @Override
+                            public void onTick(long l) {
+                                Log.i(TAG, "Ticking: " + l / 1000);
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                deleteMessageItem(mMsgItem);
+                            }
+                        }.start();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

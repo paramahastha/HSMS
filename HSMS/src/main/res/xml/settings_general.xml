@@ -54,23 +54,30 @@
             android:defaultValue="false"
             android:key="pref_key_delete_old_messages"
             android:layout="@layout/list_item_preference"
-            android:summary="@string/pref_delete_old_messages_summary"
-            android:title="@string/pref_delete_old_messages"
+            android:summary="@string/pref_delete_decrypted_messages_summary"
+            android:title="@string/pref_delete_decrypted_messages"
             android:widgetLayout="@layout/view_switch" />
+        <!--<EditTextPreference-->
+            <!--android:defaultValue="7"-->
+            <!--android:inputType="number"-->
+            <!--android:key="pref_key_delete_old_unread_messages"-->
+            <!--android:layout="@layout/list_item_preference"-->
+            <!--android:summary="@string/pref_delete_old_messages_unread_summary"-->
+            <!--android:title="@string/pref_delete_old_messages_unread" />-->
+        <!--<EditTextPreference-->
+            <!--android:defaultValue="7"-->
+            <!--android:inputType="number"-->
+            <!--android:key="pref_key_delete_old_read_messages"-->
+            <!--android:layout="@layout/list_item_preference"-->
+            <!--android:summary="@string/pref_delete_old_messages_read_summary"-->
+            <!--android:title="@string/pref_delete_old_messages_read" />-->
         <EditTextPreference
             android:defaultValue="7"
             android:inputType="number"
-            android:key="pref_key_delete_old_unread_messages"
+            android:key="pref_key_delete_decrypted_messages"
             android:layout="@layout/list_item_preference"
-            android:summary="@string/pref_delete_old_messages_unread_summary"
-            android:title="@string/pref_delete_old_messages_unread" />
-        <EditTextPreference
-            android:defaultValue="7"
-            android:inputType="number"
-            android:key="pref_key_delete_old_read_messages"
-            android:layout="@layout/list_item_preference"
-            android:summary="@string/pref_delete_old_messages_read_summary"
-            android:title="@string/pref_delete_old_messages_read" />
+            android:summary="@string/pref_delete_messages_decrypted_summary"
+            android:title="@string/pref_delete_messages_decrypted" />
     </PreferenceCategory>
     <PreferenceCategory
         android:layout="@layout/list_item_preference_category"
