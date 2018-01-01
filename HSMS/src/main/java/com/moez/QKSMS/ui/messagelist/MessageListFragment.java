@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Parcelable;
 import android.os.Vibrator;
 import android.provider.Telephony;
 import android.support.annotation.IntegerRes;
@@ -58,6 +59,7 @@ import com.moez.QKSMS.data.ConversationLegacy;
 import com.moez.QKSMS.data.Message;
 import com.moez.QKSMS.enums.QKPreference;
 import com.moez.QKSMS.interfaces.ActivityLauncher;
+import com.moez.QKSMS.service.DeleteDecryptMessagesService;
 import com.moez.QKSMS.transaction.NotificationManager;
 import com.moez.QKSMS.transaction.SmsHelper;
 import com.moez.QKSMS.ui.MainActivity;
@@ -79,6 +81,7 @@ import com.moez.QKSMS.ui.widget.WidgetProvider;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -114,6 +117,7 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
     private static final int MENU_PREFERENCES = 31;
     private static final int MENU_GROUP_PARTICIPANTS = 32;
     private static final int MENU_DECRYPT = 33;
+    public static boolean isMsgDeleted = false;
 
     private boolean mIsSmsEnabled;
 
@@ -356,7 +360,6 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
         if (messageItem.mEncrypt) {
             dialog.addMenuItem("Decrypt", MENU_DECRYPT);
         }
-
 
         if (mIsSmsEnabled) {
             dialog.addMenuItem(R.string.delete_message, MENU_DELETE_MESSAGE);
@@ -705,17 +708,13 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
                 case MENU_DECRYPT:
                     try {
                         MessageUtils.hcryptMessage(mContext, mMsgItem, true);
-                        new CountDownTimer(60000 * Integer.parseInt(QKPreferences.getString(QKPreference.AUTO_DELETE_DECRYPT)), 1000) {
-                            @Override
-                            public void onTick(long l) {
-                                Log.i(TAG, "Ticking: " + l / 1000);
-                            }
+                        Intent intent = new Intent(getActivity(), DeleteDecryptMessagesService.class);
 
-                            @Override
-                            public void onFinish() {
-                                deleteMessageItem(mMsgItem);
-                            }
-                        }.start();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("OBJECT", (Serializable) mMsgItem);
+
+                        intent.putExtra("EXTRA_MSG_ITEM", bundle.getSerializable("OBJECT"));
+                        getActivity().startService(intent);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
