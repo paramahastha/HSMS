@@ -72,6 +72,7 @@ import com.moez.QKSMS.data.Contact;
 import com.moez.QKSMS.model.MediaModel;
 import com.moez.QKSMS.model.SlideModel;
 import com.moez.QKSMS.model.SlideshowModel;
+import com.moez.QKSMS.sql.DatabaseHelper;
 import com.moez.QKSMS.transaction.SmsHelper;
 import com.moez.QKSMS.ui.base.QKActivity;
 import com.moez.QKSMS.ui.dialog.AsyncDialog;
@@ -371,10 +372,11 @@ public abstract class MessageUtils {
 
 
     public static void hcryptMessage(Context context, MessageItem msgItem, boolean encrypted) throws Exception {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle("Message");
         try {
-            dialog.setMessage(CryptoUtils.decrypt(msgItem.mBody));
+            dialog.setMessage(CryptoUtils.decrypt(msgItem.mBody, dbHelper.getSecretKey()));
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }

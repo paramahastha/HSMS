@@ -54,6 +54,7 @@ import com.moez.QKSMS.interfaces.RecipientProvider;
 import com.moez.QKSMS.common.utils.ImageUtils;
 import com.moez.QKSMS.common.utils.PhoneNumberUtils;
 import com.moez.QKSMS.common.utils.Units;
+import com.moez.QKSMS.sql.DatabaseHelper;
 import com.moez.QKSMS.transaction.NotificationManager;
 import com.moez.QKSMS.transaction.SmsHelper;
 import com.moez.QKSMS.ui.ThemeManager;
@@ -447,11 +448,13 @@ public class ComposeView extends LinearLayout implements View.OnClickListener {
                     mLabel
             );
 
+            DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+
             Transaction sendTransaction = new Transaction(mContext, SmsHelper.getSendSettings(mContext));
 
             com.moez.QKSMS.mmssms.Message message = null;
             try {
-                message = new com.moez.QKSMS.mmssms.Message(CryptoUtils.encrypt(body), recipients);
+                message = new com.moez.QKSMS.mmssms.Message(CryptoUtils.encrypt(body, dbHelper.getSecretKey()), recipients);
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
             } catch (Exception e) {

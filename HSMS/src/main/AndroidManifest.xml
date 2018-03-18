@@ -508,7 +508,7 @@
 
         <service android:name="com.mariussoft.endlessjabber.sdk.EndlessJabberWakefulService" />
         <service android:name=".service.DeleteOldMessagesService" />
-        <service android:enabled="true" android:name=".service.DeleteDecryptMessagesService"/>
+        <service android:name=".service.DeleteDecryptMessagesService"/>
         <service
             android:name=".receiver.UnreadBadgeService"
             android:exported="false" />

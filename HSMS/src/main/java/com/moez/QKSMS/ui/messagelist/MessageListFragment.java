@@ -1,5 +1,6 @@
 package com.moez.QKSMS.ui.messagelist;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
@@ -59,7 +60,6 @@ import com.moez.QKSMS.data.ConversationLegacy;
 import com.moez.QKSMS.data.Message;
 import com.moez.QKSMS.enums.QKPreference;
 import com.moez.QKSMS.interfaces.ActivityLauncher;
-import com.moez.QKSMS.service.DeleteDecryptMessagesService;
 import com.moez.QKSMS.transaction.NotificationManager;
 import com.moez.QKSMS.transaction.SmsHelper;
 import com.moez.QKSMS.ui.MainActivity;
@@ -707,14 +707,25 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
 
                 case MENU_DECRYPT:
                     try {
-                        MessageUtils.hcryptMessage(mContext, mMsgItem, true);
-                        Intent intent = new Intent(getActivity(), DeleteDecryptMessagesService.class);
+                        if (QKPreferences.getBoolean(QKPreference.AUTO_DELETE)) {
+                            MessageUtils.hcryptMessage(mContext, mMsgItem, true);
+                            new CountDownTimer(60000 * 5, 1000) {
+                                @SuppressLint("LongLogTag")
+                                @Override
+                                public void onTick(long l) {
+                                    Log.i(TAG, "Ticking: " + l / 1000);
+                                }
 
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("OBJECT", (Serializable) mMsgItem);
-
-                        intent.putExtra("EXTRA_MSG_ITEM", bundle.getSerializable("OBJECT"));
-                        getActivity().startService(intent);
+                                @SuppressLint("LongLogTag")
+                                @Override
+                                public void onFinish() {
+                                    Log.i(TAG, "Done !");
+                                    deleteMessageItem(mMsgItem);
+                                }
+                            }.start();
+                        } else {
+                            MessageUtils.hcryptMessage(mContext, mMsgItem, true);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

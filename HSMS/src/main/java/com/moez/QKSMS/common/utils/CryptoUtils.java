@@ -1,7 +1,10 @@
 package com.moez.QKSMS.common.utils;
 
+import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
+
+import com.moez.QKSMS.sql.DatabaseHelper;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
@@ -32,29 +35,24 @@ public final class CryptoUtils {
     public static boolean DEBUG_LOG_ENABLED = true;
     private static char[] XOR_SECRET_KEY = {'T', 'L', 'Q', '1', 'W', 'M', 'K', '9', 'N'};
     private static String AES_SECRET_KEY_1 = "AESSECRETKEY1";
-    private static String AES_SECRET_KEY_2 = "AESSECRETKEY2";
-    private static String TRIDES_SECRET_KEY_1 = "TRISECRETKEY1";
-    private static String TRIDES_SECRET_KEY_2 = "TRISECRETKEY2";
+    //private static String TRIDES_SECRET_KEY_1 = "TRISECRETKEY1";
 
-    public static String encrypt(String strToEncrypt) throws Exception {
+    public static String encrypt(String strToEncrypt, String secretKey) throws Exception {
 
-        String strAES = encryptAES(AES_SECRET_KEY_1, strToEncrypt);
-        String str3DES = encrypt3DES(TRIDES_SECRET_KEY_1,strAES);
+        String str3DES = encrypt3DES(secretKey,strToEncrypt);
         String strXOR = XOR(XOR_SECRET_KEY, str3DES);
-        String strAES2 = encryptAES(AES_SECRET_KEY_2, strXOR);
-        String str3DES2 = encrypt3DES(TRIDES_SECRET_KEY_2,strAES2);
-
-        return str3DES2;
-    }
-
-    public static String decrypt(String strToDecrypt) throws Exception {
-        String str3DES2 = decrypt3DES(TRIDES_SECRET_KEY_2,strToDecrypt);
-        String strAES2 = decryptAES(AES_SECRET_KEY_2, str3DES2);
-        String strXOR = XOR(XOR_SECRET_KEY, strAES2);
-        String str3DES = decrypt3DES(TRIDES_SECRET_KEY_1,strXOR);
-        String strAES = decryptAES(AES_SECRET_KEY_1, str3DES);
+        String strAES = encryptAES(AES_SECRET_KEY_1, strXOR);
 
         return strAES;
+    }
+
+    public static String decrypt(String strToDecrypt, String secretKey) throws Exception {
+
+        String strAES = decryptAES(AES_SECRET_KEY_1, strToDecrypt);
+        String strXOR = XOR(XOR_SECRET_KEY, strAES);
+        String str3DES = decrypt3DES(secretKey,strXOR);
+
+        return str3DES;
     }
 
     private static String XOR( char[] skey, String input) {

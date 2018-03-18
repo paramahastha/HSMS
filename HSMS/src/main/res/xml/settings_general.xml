@@ -71,13 +71,13 @@
             <!--android:layout="@layout/list_item_preference"-->
             <!--android:summary="@string/pref_delete_old_messages_read_summary"-->
             <!--android:title="@string/pref_delete_old_messages_read" />-->
-        <EditTextPreference
-            android:defaultValue="7"
-            android:inputType="number"
-            android:key="pref_key_delete_decrypted_messages"
-            android:layout="@layout/list_item_preference"
-            android:summary="@string/pref_delete_messages_decrypted_summary"
-            android:title="@string/pref_delete_messages_decrypted" />
+        <!--<EditTextPreference-->
+            <!--android:defaultValue="7"-->
+            <!--android:inputType="number"-->
+            <!--android:key="pref_key_delete_decrypted_messages"-->
+            <!--android:layout="@layout/list_item_preference"-->
+            <!--android:summary="@string/pref_delete_messages_decrypted_summary"-->
+            <!--android:title="@string/pref_delete_messages_decrypted" />-->
     </PreferenceCategory>
     <PreferenceCategory
         android:layout="@layout/list_item_preference_category"

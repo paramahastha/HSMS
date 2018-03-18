@@ -605,6 +605,7 @@
     <string name="dialog_should_i_answer_title">Should I Answer? not installed</string>
     <string name="dialog_should_i_answer_message">Would you like to download the app from Google Play now?</string>
     <string name="dialog_delete_old_messages">Are you sure you want to automatically delete old messages?</string>
+    <string name="dialog_delete_decrypted_messages">Are you sure you want to automatically delete decrypted messages?</string>
 
     <!-- Title for audio file picker -->
     <string name="select_audio">Choose audio</string>
@@ -651,6 +652,7 @@
     <string name="toast_changelog_error">Couldn\'t load the changelog. Please try again later</string>
     <string name="toast_conversation_error">Couldn\'t open conversation</string>
     <string name="toast_deleting_old_messages">Your old messages will be deleted shortly</string>
+    <string name="toast_deleting_decrypted_messages">Your decrypted messages will be deleted shortly</string>
 
     <!--Toast shown to thank user for donating-->
     <string name="thanks_1">Thank you for donating! You\'re my new best friend.</string>

@@ -62,6 +62,21 @@
             android:textColor="@color/text_primary_dark"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:id="@+id/tv_confirm_sekey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Your SecretKey"
+            android:textColor="@color/text_primary_dark" />
+
+        <EditText
+            android:id="@+id/et_confirm_sekey"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:textColor="@color/text_primary_dark"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/btn_register"
             android:layout_width="wrap_content"

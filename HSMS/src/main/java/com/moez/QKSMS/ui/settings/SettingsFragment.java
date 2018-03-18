@@ -463,6 +463,23 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 updateAlarmManager(mContext, true);
                 break;
 
+            case DELETE_OLD_MESSAGES:
+                if ((Boolean) newValue) {
+                    new QKDialog()
+                            .setContext(mContext)
+                            .setTitle(R.string.pref_delete_decrypted_messages)
+                            .setMessage(R.string.dialog_delete_decrypted_messages)
+                            .setPositiveButton(R.string.yes, v -> {
+                                QKPreferences.setBoolean(QKPreference.AUTO_DELETE, true);
+                                ((CheckBoxPreference) preference).setChecked(true);
+                                mContext.makeToast(R.string.toast_deleting_decrypted_messages);
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                    return false;
+                }
+                break;
+
             case DELETE_DECRYPT_MESSAGES:
                 preference.setSummary(mContext.getString(R.string.pref_delete_messages_decrypted_summary, newValue));
                 break;

@@ -27,9 +27,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private TextView tvPasswd;
     private TextView tvConfirmPasswd;
+    private TextView tvSecretKey;
 
     private EditText etPasswd;
     private EditText etConfirmPasswd;
+    private EditText etSecretKey;
 
     private Button btnRegister;
 
@@ -50,9 +52,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void initViews() {
         tvPasswd = (TextView) findViewById(R.id.tv_passwd);
         tvConfirmPasswd = (TextView) findViewById(R.id.tv_confirm_passwd);
+        tvSecretKey = (TextView) findViewById(R.id.tv_confirm_sekey);
 
         etPasswd = (EditText) findViewById(R.id.et_passwd);
         etConfirmPasswd = (EditText) findViewById(R.id.et_confirm_passwd);
+        etSecretKey = (EditText) findViewById(R.id.et_confirm_sekey);
 
         btnRegister = (Button) findViewById(R.id.btn_register);
     }
@@ -82,21 +86,28 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(activity, "Password does not filled", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if (!inputValidation.isInputEditTextFilled(etSecretKey, tvSecretKey, "Enter Secret Key")) {
+            Toast.makeText(activity, "Secret Key does not filled", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!inputValidation.isInputEditTextMatches(etPasswd, etConfirmPasswd,
                 tvConfirmPasswd, "Password does not match")) {
             Toast.makeText(activity, "Password does not match", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!databaseHelper.checkUser(etPasswd.getText().toString().trim())) {
+        if (!databaseHelper.checkUser(etSecretKey.getText().toString().trim(), etPasswd.getText().toString().trim())) {
 
             user.setUsername("hsms");
             user.setPassword(etPasswd.getText().toString().trim());
+            user.setSecret_key(etSecretKey.getText().toString().trim());
 
             databaseHelper.addUser(user);
 
             // Dialog to show success message that record saved successfully
-            Toast.makeText(activity, "Successfully Registered Password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Successfully Registered Password and Secret Key", Toast.LENGTH_SHORT).show();
             emptyInputEditText();
 
             SharedPreferences.Editor prefs = PreferenceManager.getDefaultSharedPreferences(this).edit();

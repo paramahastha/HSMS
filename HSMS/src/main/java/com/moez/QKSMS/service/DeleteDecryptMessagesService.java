@@ -7,15 +7,11 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.moez.QKSMS.common.QKPreferences;
 import com.moez.QKSMS.enums.QKPreference;
 import com.moez.QKSMS.ui.messagelist.MessageItem;
 import com.moez.QKSMS.ui.messagelist.MessageListFragment;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by kautsar on 29/12/17.

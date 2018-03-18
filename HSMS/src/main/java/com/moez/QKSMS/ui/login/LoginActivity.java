@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.moez.QKSMS.R;
 import com.moez.QKSMS.helpers.InputValidation;
+import com.moez.QKSMS.model.User;
 import com.moez.QKSMS.sql.DatabaseHelper;
 import com.moez.QKSMS.ui.view.QKEditText;
 import com.moez.QKSMS.ui.view.QKTextView;
