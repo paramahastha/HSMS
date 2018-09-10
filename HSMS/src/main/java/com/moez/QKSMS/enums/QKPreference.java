@@ -43,9 +43,9 @@ public enum QKPreference {
     DELIVERY_VIBRATE("pref_key_delivery_vibrate", true),
 
     AUTO_DELETE("pref_key_delete_old_messages", false),
-    AUTO_DELETE_UNREAD("pref_key_delete_old_unread_messages", "7"), // This type of preference only accepts strings
-    AUTO_DELETE_READ("pref_key_delete_old_read_messages", "7"),
-    AUTO_DELETE_DECRYPT("pref_key_delete_decrypted_messages", "7"),
+    AUTO_DELETE_UNREAD("pref_key_delete_old_unread_messages", "30"), // This type of preference only accepts strings
+    AUTO_DELETE_READ("pref_key_delete_old_read_messages", "30"),
+    AUTO_DELETE_DECRYPT("pref_key_delete_decrypted_messages", "30"),
 
     AUTO_EMOJI("pref_key_auto_emoji", false),
     TEXT_FORMATTING("pref_key_markdown_enabled", false),

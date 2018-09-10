@@ -41,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.moez.QKSMS.common.LiveViewManager;
+import com.moez.QKSMS.common.QKPreferences;
 import com.moez.QKSMS.common.utils.CryptoUtils;
 import com.moez.QKSMS.enums.QKPreference;
 import com.moez.QKSMS.mmssms.Transaction;
@@ -62,6 +63,9 @@ import com.moez.QKSMS.ui.base.QKActivity;
 import com.moez.QKSMS.ui.dialog.DefaultSmsHelper;
 import com.moez.QKSMS.ui.dialog.QKDialog;
 import com.moez.QKSMS.ui.dialog.mms.MMSSetupFragment;
+import com.moez.QKSMS.ui.messagelist.MessageItem;
+import com.moez.QKSMS.ui.messagelist.MessageListAdapter;
+import com.moez.QKSMS.ui.messagelist.MessageListFragment;
 import com.moez.QKSMS.ui.settings.SettingsFragment;
 
 import java.io.File;
@@ -118,6 +122,8 @@ public class ComposeView extends LinearLayout implements View.OnClickListener {
     private FrameLayout mAttachmentLayout;
     private AttachmentImageView mAttachment;
     private ImageButton mCancel;
+
+    private MessageListAdapter mAdapter;
 
     // State
     private boolean mDelayedMessagingEnabled;

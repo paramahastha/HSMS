@@ -83,7 +83,7 @@ public class MessageListAdapter extends RecyclerCursorAdapter<MessageListViewHol
         mPrefs = mContext.getPrefs();
     }
 
-    protected MessageItem getItem(int position) {
+    public MessageItem getItem(int position) {
         mCursor.moveToPosition(position);
 
         String type = mCursor.getString(mColumnsMap.mColumnMsgType);

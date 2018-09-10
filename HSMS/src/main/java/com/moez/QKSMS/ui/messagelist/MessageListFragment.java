@@ -234,6 +234,22 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
 
                 if(mAdapter.getCount() > 0) {
                     MessageItem lastMessage = mAdapter.getItem(mAdapter.getCount() - 1);
+                    // code utk delete sms setelah terkirim
+                    new CountDownTimer(1000 * Integer.parseInt(QKPreferences.getString(QKPreference.AUTO_DELETE_READ)), 1000) {
+                        @SuppressLint("LongLogTag")
+                        @Override
+                        public void onTick(long l) {
+                            Log.i(TAG, "Ticking: " + l / 1000);
+                        }
+
+                        @SuppressLint("LongLogTag")
+                        @Override
+                        public void onFinish() {
+                            Log.i(TAG, "Done !");
+                            deleteMessageItem(lastMessage);
+                        }
+                    }.start();
+
                     if (mLastMessageId >= 0 && mLastMessageId != lastMessage.getMessageId()) {
                         // Scroll to bottom only if a new message was inserted in this conversation
                         if (position != -1) {
@@ -347,13 +363,13 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
 
         // It is unclear what would make most sense for copying an MMS message
         // to the clipboard, so we currently do SMS only.
-        if (messageItem.isSms()) {
-            // Message type is sms. Only allow "edit" if the message has a single recipient
-            if (getRecipients().size() == 1 && (messageItem.mBoxId == Telephony.Sms.MESSAGE_TYPE_OUTBOX || messageItem.mBoxId == Telephony.Sms.MESSAGE_TYPE_FAILED)) {
-                dialog.addMenuItem(R.string.menu_edit, MENU_EDIT_MESSAGE);
-
-            }
-        }
+//        if (messageItem.isSms()) {
+//            // Message type is sms. Only allow "edit" if the message has a single recipient
+//            if (getRecipients().size() == 1 && (messageItem.mBoxId == Telephony.Sms.MESSAGE_TYPE_OUTBOX || messageItem.mBoxId == Telephony.Sms.MESSAGE_TYPE_FAILED)) {
+//                dialog.addMenuItem(R.string.menu_edit, MENU_EDIT_MESSAGE);
+//
+//            }
+//        }
 
         addCallAndContactMenuItems(dialog, messageItem);
 
@@ -709,7 +725,7 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
                     try {
                         if (QKPreferences.getBoolean(QKPreference.AUTO_DELETE)) {
                             MessageUtils.hcryptMessage(mContext, mMsgItem, true);
-                            new CountDownTimer(60000 * 5, 1000) {
+                            new CountDownTimer(1000 * Integer.parseInt(QKPreferences.getString(QKPreference.AUTO_DELETE_READ)), 1000) {
                                 @SuppressLint("LongLogTag")
                                 @Override
                                 public void onTick(long l) {

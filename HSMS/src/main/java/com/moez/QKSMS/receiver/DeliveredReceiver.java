@@ -7,6 +7,8 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 import com.moez.QKSMS.R;
+import com.moez.QKSMS.common.QKPreferences;
+import com.moez.QKSMS.enums.QKPreference;
 import com.moez.QKSMS.ui.settings.SettingsFragment;
 
 public class DeliveredReceiver extends com.moez.QKSMS.mmssms.DeliveredReceiver {

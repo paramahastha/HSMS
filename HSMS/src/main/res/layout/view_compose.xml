@@ -65,6 +65,7 @@
             android:inputType="textShortMessage|textMultiLine|textCapSentences"
             android:maxLines="3"
             android:minHeight="40dp"
+            android:maxLength="125"
             android:textColorHint="@color/grey_light"
             android:textCursorDrawable="@null"
             app:type="primary" />
