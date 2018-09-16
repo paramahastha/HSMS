@@ -234,21 +234,22 @@ public class MessageListFragment extends QKFragment implements ActivityLauncher,
 
                 if(mAdapter.getCount() > 0) {
                     MessageItem lastMessage = mAdapter.getItem(mAdapter.getCount() - 1);
-                    // code utk delete sms setelah terkirim
-                    new CountDownTimer(1000 * Integer.parseInt(QKPreferences.getString(QKPreference.AUTO_DELETE_READ)), 1000) {
-                        @SuppressLint("LongLogTag")
-                        @Override
-                        public void onTick(long l) {
-                            Log.i(TAG, "Ticking: " + l / 1000);
-                        }
+                    if (lastMessage.isSms() && lastMessage.mContact.equals(mContext.getString(R.string.messagelist_sender_self))) {
+                        new CountDownTimer(1000 * Integer.parseInt(QKPreferences.getString(QKPreference.AUTO_DELETE_READ)), 1000) {
+                            @SuppressLint("LongLogTag")
+                            @Override
+                            public void onTick(long l) {
+                                Log.i(TAG, "Ticking: " + l / 1000);
+                            }
 
-                        @SuppressLint("LongLogTag")
-                        @Override
-                        public void onFinish() {
-                            Log.i(TAG, "Done !");
-                            deleteMessageItem(lastMessage);
-                        }
-                    }.start();
+                            @SuppressLint("LongLogTag")
+                            @Override
+                            public void onFinish() {
+                                Log.i(TAG, "Done !");
+                                deleteMessageItem(lastMessage);
+                            }
+                        }.start();
+                    }
 
                     if (mLastMessageId >= 0 && mLastMessageId != lastMessage.getMessageId()) {
                         // Scroll to bottom only if a new message was inserted in this conversation
